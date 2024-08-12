@@ -13,9 +13,26 @@ import org.springframework.http.ResponseEntity;
  * Exception handler for data access exceptions in the Category repository.
  */
 @RestControllerAdvice
-public class InfrastructureCategoryRepositoryException {
+public class InfrastructureCategoryRepositoryException extends RuntimeException {
 
     private static final Logger logger = LoggerFactory.getLogger(InfrastructureCategoryRepositoryException.class);
+
+    private final String errorCode;
+
+    /**
+     * Constructor with error code, message, and cause.
+     * @param errorCode the error code
+     * @param message the detail message
+     * @param cause the cause of the exception
+     */
+    public InfrastructureCategoryRepositoryException(String errorCode, String message, Throwable cause) {
+        super(message, cause);
+        this.errorCode = errorCode;
+    }
+
+    public String getErrorCode() {
+        return errorCode;
+    }
 
     /**
      * Handles DataAccessException and returns an appropriate error response.

@@ -2,7 +2,7 @@ package ai.shreds.domain;
 
 import ai.shreds.shared.SharedCategoryDTO;
 import org.springframework.stereotype.Component;
-import ai.shreds.domain.DomainCategoryEntity;
+import lombok.Builder;
 
 /**
  * Mapper class for converting between DomainCategoryEntity and SharedCategoryDTO.
@@ -12,7 +12,7 @@ public class DomainCategoryMapper {
 
     /**
      * Converts a SharedCategoryDTO to a DomainCategoryEntity.
-     *
+     * 
      * @param sharedCategory the SharedCategoryDTO to convert
      * @return the converted DomainCategoryEntity
      */
@@ -29,7 +29,7 @@ public class DomainCategoryMapper {
 
     /**
      * Converts a DomainCategoryEntity to a SharedCategoryDTO.
-     *
+     * 
      * @param domainCategory the DomainCategoryEntity to convert
      * @return the converted SharedCategoryDTO
      */

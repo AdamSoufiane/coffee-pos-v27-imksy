@@ -1,8 +1,8 @@
 package ai.shreds.adapter;
 
 import ai.shreds.domain.DomainCategoryEntity;
-import ai.shreds.adapter.AdapterCategoryRequestParams;
-import ai.shreds.adapter.AdapterCategoryResponseDTO;
+import ai.shreds.shared.AdapterCategoryRequestParams;
+import ai.shreds.shared.AdapterCategoryResponseDTO;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,17 +26,17 @@ public class AdapterCategoryMapper {
 
     /**
      * Maps AdapterCategoryRequestParams to DomainCategoryEntity.
-     * @param adapterCategory the adapter category request params
+     * @param adapterCategoryRequestParams the adapter category request params
      * @return the domain category entity
      */
-    public DomainCategoryEntity toDomainCategoryEntity(AdapterCategoryRequestParams adapterCategory) {
-        if (adapterCategory == null) {
+    public DomainCategoryEntity toDomainCategoryEntity(AdapterCategoryRequestParams adapterCategoryRequestParams) {
+        if (adapterCategoryRequestParams == null) {
             return null;
         }
         return new DomainCategoryEntity(
-                adapterCategory.getId(),
-                adapterCategory.getName(),
-                adapterCategory.getParent_id()
+                adapterCategoryRequestParams.getId(),
+                adapterCategoryRequestParams.getName(),
+                adapterCategoryRequestParams.getParentId()
         );
     }
 }

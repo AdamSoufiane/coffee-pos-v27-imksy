@@ -10,13 +10,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 
 @ControllerAdvice
-public class AdapterCategoryControllerException extends RuntimeException {
+public class AdapterCategoryControllerException {
 
     private static final Logger logger = LoggerFactory.getLogger(AdapterCategoryControllerException.class);
 
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler(AdapterCategoryControllerException.NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<String> handleNotFoundException(NotFoundException ex) {
+    public ResponseEntity<String> handleNotFoundException(AdapterCategoryControllerException.NotFoundException ex) {
         logger.error("Category not found: ", ex);
         return new ResponseEntity<>("{\"error\": \"Category not found.\"}", HttpStatus.NOT_FOUND);
     }

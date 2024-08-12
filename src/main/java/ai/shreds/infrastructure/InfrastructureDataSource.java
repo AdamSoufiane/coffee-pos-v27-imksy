@@ -7,25 +7,35 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.experimental.FieldDefaults;
+import lombok.AccessLevel;
+import lombok.extern.slf4j.Slf4j;
+
 import javax.sql.DataSource;
-import lombok.Getter;
-import lombok.Setter;
 
 @Configuration
+@Data
+@NoArgsConstructor
+@ToString
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@Slf4j
 public class InfrastructureDataSource {
 
     private static final Logger logger = LoggerFactory.getLogger(InfrastructureDataSource.class);
 
-    @Getter @Setter @Value("${spring.datasource.url}")
+    @Value("${spring.datasource.url}")
     private String jdbcUrl;
 
-    @Getter @Setter @Value("${spring.datasource.username}")
+    @Value("${spring.datasource.username}")
     private String username;
 
-    @Getter @Setter @Value("${spring.datasource.password}")
+    @Value("${spring.datasource.password}")
     private String password;
 
-    @Getter @Setter @Value("${spring.datasource.driver-class-name}")
+    @Value("${spring.datasource.driver-class-name}")
     private String driverClassName;
 
     @Bean
@@ -39,8 +49,6 @@ public class InfrastructureDataSource {
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-        config.addDataSourceProperty("maximumPoolSize", "10");
-        config.addDataSourceProperty("connectionTimeout", "30000");
         logger.info("Configuring DataSource with URL: {}", jdbcUrl);
         return new HikariDataSource(config);
     }

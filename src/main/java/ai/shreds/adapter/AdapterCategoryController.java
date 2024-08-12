@@ -2,10 +2,8 @@ package ai.shreds.adapter;
 
 import ai.shreds.application.ApplicationCategoryServicePort;
 import ai.shreds.shared.SharedCategoryDTO;
-import ai.shreds.adapter.AdapterCategoryMapper;
-import ai.shreds.adapter.AdapterCategoryResponseDTO;
-import ai.shreds.adapter.InternalServerErrorException;
-import ai.shreds.adapter.NotFoundException;
+import ai.shreds.shared.AdapterCategoryResponseDTO;
+import ai.shreds.shared.AdapterCategoryMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
