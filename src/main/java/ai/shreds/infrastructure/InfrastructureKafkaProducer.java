@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.KafkaException;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,10 +26,6 @@ public class InfrastructureKafkaProducer {
         this.objectMapper = objectMapper;
     }
 
-    /**
-     * Produces a Kafka message for a product update.
-     * @param product the product entity to be updated
-     */
     @Transactional
     public void produceUpdateMessage(DomainProductEntity product) {
         try {
@@ -38,10 +34,10 @@ public class InfrastructureKafkaProducer {
             logger.info("Successfully produced message to Kafka for product: {}", product.getId());
         } catch (JsonProcessingException e) {
             logger.error("Failed to serialize product entity", e);
-            throw new IllegalStateException("Failed to serialize product entity", e);
+            throw new RuntimeException("Failed to serialize product entity", e);
         } catch (KafkaException e) {
             logger.error("Failed to produce message to Kafka", e);
-            throw new IllegalStateException("Failed to produce message to Kafka", e);
+            throw new RuntimeException("Failed to produce message to Kafka", e);
         }
     }
 }

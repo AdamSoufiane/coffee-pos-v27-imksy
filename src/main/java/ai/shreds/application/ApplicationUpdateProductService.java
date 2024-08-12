@@ -1,14 +1,20 @@
 package ai.shreds.application;
 
-import ai.shreds.adapter.AdapterProductRequestDTO;
-import ai.shreds.adapter.AdapterProductResponseDTO;
+import ai.shreds.shared.AdapterProductRequestDTO;
+import ai.shreds.shared.AdapterProductResponseDTO;
 import ai.shreds.domain.DomainProductEntity;
 import ai.shreds.domain.DomainUpdateProductService;
 import ai.shreds.domain.DomainProductMapper;
+import ai.shreds.exceptions.CustomValidationException;
+import ai.shreds.exceptions.ApplicationProductServiceException;
+import ai.shreds.domain.DomainProductServiceException;
+import java.math.BigDecimal;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
@@ -18,70 +24,37 @@ public class ApplicationUpdateProductService implements ApplicationUpdateProduct
     private final DomainUpdateProductService domainUpdateProductService;
     private final DomainProductMapper domainProductMapper;
 
-    /**
-     * Updates the details of an existing product.
-     * @param request Product update request DTO
-     * @return Response DTO with updated product details
-     */
+    private static final Logger log = LoggerFactory.getLogger(ApplicationUpdateProductService.class);
+
     @Override
     public AdapterProductResponseDTO updateProduct(AdapterProductRequestDTO request) {
         try {
-            // Validate request data
             validateRequestData(request);
-
-            // Log the incoming request
             log.info("Updating product with ID: {}", request.getId());
-
-            // Map request to domain entity
             DomainProductEntity productEntity = domainProductMapper.toDomain(request);
-
-            // Update product details using domain service
             DomainProductEntity updatedProduct = domainUpdateProductService.updateProduct(productEntity);
-
-            // Map updated domain entity to response DTO
             return domainProductMapper.toResponse(updatedProduct);
         } catch (Exception e) {
-            // Log the exception
             log.error("Error updating product", e);
-            // Handle exception and return error response
-            return new ApplicationProductServiceException().handleException(e);
+            return new DomainProductServiceException().handleException(e);
         }
     }
 
-    /**
-     * Notifies other services about the product update.
-     * @param response Response DTO with updated product details
-     */
     @Override
     public void notifyProductUpdate(AdapterProductResponseDTO response) {
         try {
-            // Log the notification
             log.info("Notifying product update for product ID: {}", extractProductId(response));
-
-            // Produce Kafka message to notify other services about the product update
             domainUpdateProductService.notifyProductUpdate(response);
         } catch (Exception e) {
-            // Log the exception
             log.error("Error notifying product update", e);
-            // Handle exception
             new ApplicationProductServiceException().handleException(e);
         }
     }
 
-    /**
-     * Extracts the product ID from the response DTO.
-     * @param response Response DTO
-     * @return Product ID
-     */
     private UUID extractProductId(AdapterProductResponseDTO response) {
         return response.getProductId();
     }
 
-    /**
-     * Validates the product update request data.
-     * @param request Product update request DTO
-     * @throws CustomValidationException if validation fails
-     */
     private void validateRequestData(AdapterProductRequestDTO request) throws CustomValidationException {
         if (request.getId() == null) {
             throw new CustomValidationException("Product ID is required");

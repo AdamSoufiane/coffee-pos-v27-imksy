@@ -1,16 +1,13 @@
 package ai.shreds.domain;
 
-import ai.shreds.shared.AdapterProductRequestDTO;
+import ai.shreds.adapter.AdapterProductRequestDTO;
 import ai.shreds.shared.AdapterProductResponseDTO;
-import ai.shreds.domain.DomainProductEntity;
-import ai.shreds.domain.DomainInventoryEntity;
 import java.math.BigDecimal;
-import java.util.UUID;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import static lombok.AccessLevel.PRIVATE;
 
-@NoArgsConstructor(access = PRIVATE)
+@Data
+@NoArgsConstructor
 public class DomainProductMapper {
 
     /**
@@ -18,7 +15,7 @@ public class DomainProductMapper {
      * @param request the product request DTO
      * @return the domain product entity
      */
-    public static DomainProductEntity toDomain(AdapterProductRequestDTO request) {
+    public DomainProductEntity toDomain(AdapterProductRequestDTO request) {
         if (request == null) {
             throw new IllegalArgumentException("Request cannot be null");
         }
@@ -38,8 +35,8 @@ public class DomainProductMapper {
         product.setName(request.getName());
         product.setDescription(request.getDescription());
         product.setPrice(request.getPrice());
-        product.setCategoryId(request.getCategory_id());
-        product.setStockQuantity(request.getStock_quantity());
+        product.setCategory_id(request.getCategory_id());
+        product.setStock_quantity(request.getStock_quantity());
         return product;
     }
 
@@ -48,7 +45,7 @@ public class DomainProductMapper {
      * @param entity the domain product entity
      * @return the product response DTO
      */
-    public static AdapterProductResponseDTO toResponse(DomainProductEntity entity) {
+    public AdapterProductResponseDTO toResponse(DomainProductEntity entity) {
         if (entity == null) {
             throw new IllegalArgumentException("Entity cannot be null");
         }
@@ -63,7 +60,7 @@ public class DomainProductMapper {
      * @param entity the domain inventory entity
      * @return the product response DTO
      */
-    public static AdapterProductResponseDTO toInventory(DomainInventoryEntity entity) {
+    public AdapterProductResponseDTO toInventory(DomainInventoryEntity entity) {
         if (entity == null) {
             throw new IllegalArgumentException("Entity cannot be null");
         }

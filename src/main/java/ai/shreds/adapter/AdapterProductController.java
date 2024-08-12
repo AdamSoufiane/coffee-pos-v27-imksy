@@ -1,12 +1,11 @@
 package ai.shreds.adapter;
 
+import ai.shreds.application.ApplicationUpdateProductInputPort;
 import ai.shreds.shared.AdapterProductRequestDTO;
 import ai.shreds.shared.AdapterProductResponseDTO;
-import ai.shreds.application.ApplicationUpdateProductInputPort;
-import ai.shreds.domain.DomainProductEntity;
-import ai.shreds.domain.DomainUpdateProductService;
-import ai.shreds.domain.DomainProductMapper;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,10 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/products")
@@ -26,8 +22,7 @@ import java.util.UUID;
 public class AdapterProductController {
 
     private final ApplicationUpdateProductInputPort applicationUpdateProductInputPort;
-    private final DomainUpdateProductService domainUpdateProductService;
-    private final DomainProductMapper domainProductMapper;
+    private final AdapterProductMapper adapterProductMapper;
     private static final Logger logger = LoggerFactory.getLogger(AdapterProductController.class);
 
     /**
@@ -39,9 +34,8 @@ public class AdapterProductController {
     public ResponseEntity<AdapterProductResponseDTO> handleRequest(@Valid @RequestBody AdapterProductRequestDTO request) {
         try {
             validateRequest(request);
-            DomainProductEntity domainProductEntity = domainProductMapper.toDomain(request);
-            DomainProductEntity updatedProduct = domainUpdateProductService.updateProduct(domainProductEntity);
-            AdapterProductResponseDTO response = domainProductMapper.toResponse(updatedProduct);
+            DomainProductEntity domainProductEntity = adapterProductMapper.toDomain(request);
+            AdapterProductResponseDTO response = applicationUpdateProductInputPort.updateProduct(request);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(createErrorResponse("Invalid product data: " + e.getMessage()), HttpStatus.BAD_REQUEST);

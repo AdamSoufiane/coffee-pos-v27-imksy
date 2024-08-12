@@ -22,7 +22,7 @@ public class InfrastructureException {
         // Create a response object with error details
         AdapterProductResponseDTO response = new AdapterProductResponseDTO();
         response.setStatus("failure");
-        response.setProductId(null); // No product ID in case of an error
+        response.setProduct_id(null); // No product ID in case of an error
 
         // Return the response entity with HTTP status 500 (Internal Server Error)
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -36,7 +36,7 @@ public class InfrastructureException {
         // Create a response object with error details
         AdapterProductResponseDTO response = new AdapterProductResponseDTO();
         response.setStatus("failure");
-        response.setProductId(null); // No product ID in case of an error
+        response.setProduct_id(null); // No product ID in case of an error
 
         // Return the response entity with HTTP status 500 (Internal Server Error)
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -50,7 +50,7 @@ public class InfrastructureException {
         // Create a response object with error details
         AdapterProductResponseDTO response = new AdapterProductResponseDTO();
         response.setStatus("failure");
-        response.setProductId(null); // No product ID in case of an error
+        response.setProduct_id(null); // No product ID in case of an error
 
         // Return the response entity with HTTP status 500 (Internal Server Error)
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -64,7 +64,7 @@ public class InfrastructureException {
         // Create a response object with error details
         AdapterProductResponseDTO response = new AdapterProductResponseDTO();
         response.setStatus("failure");
-        response.setProductId(null); // No product ID in case of an error
+        response.setProduct_id(null); // No product ID in case of an error
 
         // Return the response entity with HTTP status 400 (Bad Request)
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);

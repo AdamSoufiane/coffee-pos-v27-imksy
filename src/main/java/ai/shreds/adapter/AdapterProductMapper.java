@@ -1,8 +1,8 @@
 package ai.shreds.adapter;
 
-import ai.shreds.shared.AdapterProductRequestDTO;
-import ai.shreds.shared.AdapterProductResponseDTO;
 import ai.shreds.domain.DomainProductEntity;
+import ai.shreds.shared.AdapterProductResponseDTO;
+import ai.shreds.shared.AdapterProductRequestDTO;
 import org.springframework.stereotype.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +13,6 @@ import java.util.UUID;
 public class AdapterProductMapper {
 
     private static final Logger logger = LoggerFactory.getLogger(AdapterProductMapper.class);
-    private AdapterProductMapper() {} // Private constructor to enforce the use of @Component annotation
 
     public DomainProductEntity toDomain(AdapterProductRequestDTO request) {
         if (request == null) {
@@ -26,8 +25,8 @@ public class AdapterProductMapper {
                 .name(request.getName())
                 .description(request.getDescription())
                 .price(request.getPrice())
-                .categoryId(request.getCategoryId())
-                .stockQuantity(request.getStockQuantity())
+                .category_id(request.getCategory_id())
+                .stock_quantity(request.getStock_quantity())
                 .build();
     }
 
@@ -38,12 +37,8 @@ public class AdapterProductMapper {
         logger.info("Mapping DomainProductEntity to AdapterProductResponseDTO");
         return AdapterProductResponseDTO.builder()
                 .status("success")
-                .productId(entity.getId() != null ? entity.getId() : UUID.randomUUID())
-                .name(entity.getName())
-                .description(entity.getDescription())
-                .price(entity.getPrice())
-                .categoryId(entity.getCategoryId())
-                .stockQuantity(entity.getStockQuantity())
+                .product_id(entity.getId() != null ? entity.getId() : UUID.randomUUID())
+                .message("Product mapped successfully")
                 .build();
     }
 
@@ -51,7 +46,7 @@ public class AdapterProductMapper {
         if (request.getPrice() != null && request.getPrice().compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Price must be a positive value.");
         }
-        if (request.getStockQuantity() != null && request.getStockQuantity() < 0) {
+        if (request.getStock_quantity() != null && request.getStock_quantity() < 0) {
             throw new IllegalArgumentException("Stock quantity must be a non-negative integer.");
         }
     }

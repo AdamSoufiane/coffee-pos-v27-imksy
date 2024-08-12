@@ -1,6 +1,6 @@
 package ai.shreds.application;
 
-import ai.shreds.shared.AdapterProductResponseDTO;
+import ai.shreds.adapter.AdapterProductResponseDTO;
 
 /**
  * Interface for notifying other services about product updates.

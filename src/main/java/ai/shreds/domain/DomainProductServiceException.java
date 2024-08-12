@@ -21,8 +21,8 @@ public class DomainProductServiceException {
         log.error("Exception occurred in domain service: {}", exception.getMessage(), exception);
         AdapterProductResponseDTO response = new AdapterProductResponseDTO();
         response.setStatus("failure");
-        response.setProduct_id(null); // Assuming we don't have a product ID in case of an exception
-        response.setMessage(exception.getMessage()); // Assuming there is a message field in AdapterProductResponseDTO
+        response.setProductId(null); // Assuming we don't have a product ID in case of an exception
+        response.setMessage(exception.getMessage());
         return response;
     }
 }
