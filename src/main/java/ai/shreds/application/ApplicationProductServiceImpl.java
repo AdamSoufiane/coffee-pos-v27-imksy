@@ -2,10 +2,12 @@ package ai.shreds.application;
 
 import ai.shreds.domain.DomainCreateProductServiceDomain;
 import ai.shreds.domain.DomainProductRepositoryPort;
+import ai.shreds.domain.DomainProductEntity;
 import ai.shreds.shared.SharedProductDTO;
 import ai.shreds.shared.SharedRequestParams;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ApplicationProductServiceImpl implements ApplicationProductServicePort {
     private final DomainProductRepositoryPort productRepository;
     private final DomainCreateProductServiceDomain createProductServiceDomain;
+    private static final Logger log = LoggerFactory.getLogger(ApplicationProductServiceImpl.class);
 
     @Override
     @Transactional
@@ -27,12 +30,23 @@ public class ApplicationProductServiceImpl implements ApplicationProductServiceP
             SharedProductDTO productDTO = createProductServiceDomain.processProductCreation(request);
 
             // Save the product entity to the repository
-            productRepository.save(productDTO.toEntity());
+            productRepository.save(mapToEntity(productDTO));
 
             return productDTO;
         } catch (Exception e) {
             log.error("Error creating product: ", e);
             throw new RuntimeException("Failed to create product", e);
         }
+    }
+
+    private DomainProductEntity mapToEntity(SharedProductDTO productDTO) {
+        return new DomainProductEntity(
+                productDTO.getId(),
+                productDTO.getName(),
+                productDTO.getDescription(),
+                productDTO.getPrice(),
+                productDTO.getCategoryId(),
+                productDTO.getStockQuantity()
+        );
     }
 }

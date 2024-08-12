@@ -9,9 +9,6 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-/**
- * Represents a product entity in the domain layer.
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,43 +17,25 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 public class DomainProductEntity {
 
-    /**
-     * Unique identifier for the product.
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
-    /**
-     * Name of the product.
-     */
     @Column(name = "name", nullable = false, length = 255)
     private String name;
 
-    /**
-     * Description of the product.
-     */
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    /**
-     * Price of the product.
-     */
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-    /**
-     * Identifier for the category the product belongs to.
-     */
     @Column(name = "category_id", nullable = false)
     private UUID categoryId;
 
-    /**
-     * Quantity of the product in stock.
-     */
     @Column(name = "stock_quantity", nullable = false)
-    private Integer stockQuantity;
+    private int stockQuantity;
 
     @Override
     public boolean equals(Object o) {

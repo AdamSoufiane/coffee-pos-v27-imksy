@@ -15,6 +15,6 @@ public class SharedProductDTO {
     private String name;
     private String description;
     private BigDecimal price;
-    private UUID category_id;
-    private int stock_quantity;
+    private UUID categoryId;
+    private int stockQuantity;
 }

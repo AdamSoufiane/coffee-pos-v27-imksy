@@ -1,8 +1,8 @@
 package ai.shreds.adapter;
 
 import ai.shreds.application.ApplicationProductServicePort;
-import ai.shreds.shared.SharedProductDTO;
 import ai.shreds.shared.SharedRequestParams;
+import ai.shreds.shared.SharedProductDTO;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -88,39 +88,5 @@ public class AdapterProductController {
         );
         logger.error("Exception occurred: ", e);
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-}
-
-@Getter
-@Setter
-class AdapterCreateProductRequest {
-    @NotBlank(message = "Name is mandatory")
-    private String name;
-
-    private String description;
-
-    @NotNull(message = "Price is mandatory")
-    @Min(value = 0, message = "Price must be a positive value")
-    private double price;
-
-    @NotNull(message = "Category ID is mandatory")
-    private UUID categoryId;
-
-    @NotNull(message = "Stock quantity is mandatory")
-    @Min(value = 0, message = "Stock quantity must be a non-negative integer")
-    private int stockQuantity;
-}
-
-@Getter
-@Setter
-class AdapterCreateProductResponse {
-    private String status;
-    private UUID productId;
-    private String message;
-
-    public AdapterCreateProductResponse(String status, UUID productId, String message) {
-        this.status = status;
-        this.productId = productId;
-        this.message = message;
     }
 }

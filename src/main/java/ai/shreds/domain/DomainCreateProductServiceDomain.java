@@ -2,8 +2,8 @@ package ai.shreds.domain;
 
 import ai.shreds.shared.SharedProductDTO;
 import ai.shreds.shared.SharedRequestParams;
-import ai.shreds.application.DomainProductRepositoryPort;
-import ai.shreds.application.DomainInventoryRepositoryPort;
+import ai.shreds.domain.DomainProductRepositoryPort;
+import ai.shreds.domain.DomainInventoryRepositoryPort;
 import ai.shreds.infrastructure.InfrastructureTransactionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -40,7 +40,7 @@ public class DomainCreateProductServiceDomain {
     public SharedProductDTO processProductCreation(SharedRequestParams request) {
         validateProductData(request);
 
-        transactionService.startTransaction();
+        var transactionStatus = transactionService.startTransaction();
         try {
             UUID productId = UUID.randomUUID();
             DomainProductEntity product = new DomainProductEntity(productId, request.getName(), request.getDescription(), request.getPrice(), request.getCategoryId(), request.getStockQuantity());
@@ -49,12 +49,12 @@ public class DomainCreateProductServiceDomain {
             DomainInventoryEntity inventory = new DomainInventoryEntity(productId, request.getStockQuantity(), 0);
             inventoryRepository.save(inventory);
 
-            transactionService.commitTransaction();
+            transactionService.commitTransaction(transactionStatus);
             logger.info("Transaction committed successfully for product creation.");
 
             return new SharedProductDTO(productId, request.getName(), request.getDescription(), request.getPrice(), request.getCategoryId(), request.getStockQuantity());
         } catch (Exception e) {
-            transactionService.rollbackTransaction();
+            transactionService.rollbackTransaction(transactionStatus);
             logger.severe("Transaction rolled back due to error: " + e.getMessage());
             throw new RuntimeException("Error creating product", e);
         }

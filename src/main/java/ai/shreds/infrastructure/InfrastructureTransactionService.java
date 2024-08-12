@@ -6,12 +6,15 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 public class InfrastructureTransactionService {
 
+    private static final Logger log = LoggerFactory.getLogger(InfrastructureTransactionService.class);
     private final PlatformTransactionManager transactionManager;
 
     @Autowired

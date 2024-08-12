@@ -1,25 +1,21 @@
 package ai.shreds.shared;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class SharedRequestParams {
     @NotBlank
     private String name;
 
-    @Size(max = 255)
     private String description;
 
     @NotNull
@@ -31,5 +27,5 @@ public class SharedRequestParams {
 
     @NotNull
     @Positive
-    private Integer stock_quantity;
+    private Integer stockQuantity;
 }
