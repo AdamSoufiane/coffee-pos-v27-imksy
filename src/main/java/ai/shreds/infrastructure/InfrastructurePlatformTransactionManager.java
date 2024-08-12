@@ -19,7 +19,7 @@ public class InfrastructurePlatformTransactionManager {
 
     /**
      * Constructor for InfrastructurePlatformTransactionManager.
-     *
+     * 
      * @param entityManagerFactory the EntityManagerFactory to be used by the transaction manager
      */
     public InfrastructurePlatformTransactionManager(EntityManagerFactory entityManagerFactory) {
@@ -28,7 +28,7 @@ public class InfrastructurePlatformTransactionManager {
 
     /**
      * Defines the PlatformTransactionManager bean.
-     *
+     * 
      * @return a configured JpaTransactionManager
      */
     @Bean

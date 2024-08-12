@@ -7,19 +7,16 @@ import ai.shreds.application.ApplicationRetrieveCategoryHierarchyInputPort;
 import ai.shreds.adapter.dto.AdapterCategoryRequestParams;
 import ai.shreds.adapter.dto.AdapterCategoryResponseDTO;
 import ai.shreds.adapter.mapper.AdapterCategoryMapper;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/categories")
-@RequiredArgsConstructor
 public class AdapterCategoryController {
 
     private static final Logger logger = LoggerFactory.getLogger(AdapterCategoryController.class);
@@ -30,47 +27,62 @@ public class AdapterCategoryController {
     private final ApplicationRetrieveCategoryHierarchyInputPort retrieveCategoryHierarchyInputPort;
     private final AdapterCategoryMapper categoryMapper;
 
+    public AdapterCategoryController(ApplicationCreateCategoryInputPort createCategoryInputPort,
+                                     ApplicationUpdateCategoryInputPort updateCategoryInputPort,
+                                     ApplicationDeleteCategoryInputPort deleteCategoryInputPort,
+                                     ApplicationRetrieveCategoryHierarchyInputPort retrieveCategoryHierarchyInputPort,
+                                     AdapterCategoryMapper categoryMapper) {
+        this.createCategoryInputPort = createCategoryInputPort;
+        this.updateCategoryInputPort = updateCategoryInputPort;
+        this.deleteCategoryInputPort = deleteCategoryInputPort;
+        this.retrieveCategoryHierarchyInputPort = retrieveCategoryHierarchyInputPort;
+        this.categoryMapper = categoryMapper;
+    }
+
     @PostMapping
     public ResponseEntity<AdapterCategoryResponseDTO> createCategory(@Valid @RequestBody AdapterCategoryRequestParams request) {
+        AdapterCategoryResponseDTO response;
         try {
-            AdapterCategoryResponseDTO response = createCategoryInputPort.createCategory(categoryMapper.toDomainDTO(request));
-            return ResponseEntity.ok(response);
+            response = createCategoryInputPort.createCategory(request);
         } catch (Exception e) {
             logger.error("Error creating category", e);
             return ResponseEntity.badRequest().body(new AdapterCategoryResponseDTO(null, "Error creating category: " + e.getMessage(), null));
         }
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<AdapterCategoryResponseDTO> updateCategory(@PathVariable Long id, @Valid @RequestBody AdapterCategoryRequestParams request) {
+        AdapterCategoryResponseDTO response;
         try {
-            AdapterCategoryResponseDTO response = updateCategoryInputPort.updateCategory(id, categoryMapper.toDomainDTO(request));
-            return ResponseEntity.ok(response);
+            response = updateCategoryInputPort.updateCategory(id, request);
         } catch (Exception e) {
             logger.error("Error updating category", e);
             return ResponseEntity.badRequest().body(new AdapterCategoryResponseDTO(null, "Error updating category: " + e.getMessage(), null));
         }
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
         try {
             deleteCategoryInputPort.deleteCategory(id);
-            return ResponseEntity.ok("Category deleted successfully.");
         } catch (Exception e) {
             logger.error("Error deleting category", e);
             return ResponseEntity.badRequest().body("Error deleting category: " + e.getMessage());
         }
+        return ResponseEntity.ok("Category deleted successfully.");
     }
 
     @GetMapping
     public ResponseEntity<List<AdapterCategoryResponseDTO>> retrieveCategoryHierarchy(@RequestParam(required = false) Long parent_id) {
+        List<AdapterCategoryResponseDTO> response;
         try {
-            List<AdapterCategoryResponseDTO> response = retrieveCategoryHierarchyInputPort.retrieveCategoryHierarchy(parent_id).stream().map(categoryMapper::toAdapterDTO).collect(Collectors.toList());
-            return ResponseEntity.ok(response);
+            response = retrieveCategoryHierarchyInputPort.retrieveCategoryHierarchy(parent_id);
         } catch (Exception e) {
             logger.error("Error retrieving category hierarchy", e);
             return ResponseEntity.badRequest().body(null);
         }
+        return ResponseEntity.ok(response);
     }
 }

@@ -41,10 +41,10 @@ public class InfrastructureCategoryRepositoryImpl implements DomainCategoryRepos
     }
 
     @Override
-    public Optional<DomainCategoryEntity> findById(Long id) {
+    public DomainCategoryEntity findById(Long id) {
         validateId(id);
         try {
-            Optional<DomainCategoryEntity> category = Optional.ofNullable(entityManager.find(DomainCategoryEntity.class, id));
+            DomainCategoryEntity category = entityManager.find(DomainCategoryEntity.class, id);
             logger.info("Category found by id {}: {}", id, category);
             return category;
         } catch (Exception e) {

@@ -2,18 +2,14 @@ package ai.shreds.infrastructure;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import lombok.Getter;
-import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.beans.factory.annotation.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.sql.DataSource;
 
 @Configuration
-@Getter
-@Setter
 public class InfrastructureDataSource {
 
     private static final Logger logger = LoggerFactory.getLogger(InfrastructureDataSource.class);
@@ -29,6 +25,38 @@ public class InfrastructureDataSource {
 
     @Value("${spring.datasource.driver-class-name}")
     private String dbDriverClassName;
+
+    public String getDbUrl() {
+        return dbUrl;
+    }
+
+    public void setDbUrl(String dbUrl) {
+        this.dbUrl = dbUrl;
+    }
+
+    public String getDbUsername() {
+        return dbUsername;
+    }
+
+    public void setDbUsername(String dbUsername) {
+        this.dbUsername = dbUsername;
+    }
+
+    public String getDbPassword() {
+        return dbPassword;
+    }
+
+    public void setDbPassword(String dbPassword) {
+        this.dbPassword = dbPassword;
+    }
+
+    public String getDbDriverClassName() {
+        return dbDriverClassName;
+    }
+
+    public void setDbDriverClassName(String dbDriverClassName) {
+        this.dbDriverClassName = dbDriverClassName;
+    }
 
     @Bean
     public DataSource dataSource() {

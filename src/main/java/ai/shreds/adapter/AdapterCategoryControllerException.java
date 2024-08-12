@@ -17,7 +17,7 @@ public class AdapterCategoryControllerException {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleException(Exception e) {
-        logger.error("Exception occurred: ", e);
+        logger.error("Exception: ", e);
         if (e instanceof IllegalArgumentException) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } else if (e instanceof NullPointerException) {
@@ -26,16 +26,14 @@ public class AdapterCategoryControllerException {
             return new ResponseEntity<>("Database access error", HttpStatus.INTERNAL_SERVER_ERROR);
         } else if (e instanceof EntityNotFoundException) {
             return new ResponseEntity<>("Entity not found", HttpStatus.NOT_FOUND);
-        } else if (e instanceof CustomCategoryException) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } else {
-            return new ResponseEntity<>("Unexpected exception occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        // Add more specific exception handling if needed
+        return new ResponseEntity<>("Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<String> handleValidationException(ValidationException e) {
-        logger.error("Validation Exception occurred: ", e);
+        logger.error("Validation Exception: ", e);
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

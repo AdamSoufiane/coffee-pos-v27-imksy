@@ -21,33 +21,18 @@ import com.zaxxer.hikari.HikariDataSource;
 @EnableJpaRepositories(basePackages = "ai.shreds.infrastructure")
 public class InfrastructureDatabaseConfig {
 
-    /**
-     * URL of the database.
-     */
     @Value("${spring.datasource.url}")
     private String databaseUrl;
 
-    /**
-     * Username for the database connection.
-     */
     @Value("${spring.datasource.username}")
     private String databaseUsername;
 
-    /**
-     * Password for the database connection.
-     */
     @Value("${spring.datasource.password}")
     private String databasePassword;
 
-    /**
-     * Driver class name for the database connection.
-     */
     @Value("${spring.datasource.driver-class-name}")
     private String databaseDriverClassName;
 
-    /**
-     * Hibernate dialect for the database.
-     */
     @Value("${spring.jpa.properties.hibernate.dialect}")
     private String hibernateDialect;
 
@@ -58,16 +43,12 @@ public class InfrastructureDatabaseConfig {
      */
     @Bean
     public DataSource dataSource() {
-        try {
-            HikariConfig hikariConfig = new HikariConfig();
-            hikariConfig.setJdbcUrl(databaseUrl);
-            hikariConfig.setUsername(databaseUsername);
-            hikariConfig.setPassword(databasePassword);
-            hikariConfig.setDriverClassName(databaseDriverClassName);
-            return new HikariDataSource(hikariConfig);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to configure DataSource", e);
-        }
+        HikariConfig hikariConfig = new HikariConfig();
+        hikariConfig.setJdbcUrl(databaseUrl);
+        hikariConfig.setUsername(databaseUsername);
+        hikariConfig.setPassword(databasePassword);
+        hikariConfig.setDriverClassName(databaseDriverClassName);
+        return new HikariDataSource(hikariConfig);
     }
 
     /**
@@ -77,17 +58,13 @@ public class InfrastructureDatabaseConfig {
      */
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-        try {
-            LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-            em.setDataSource(dataSource());
-            em.setPackagesToScan("ai.shreds.domain");
-            HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-            em.setJpaVendorAdapter(vendorAdapter);
-            em.getJpaPropertyMap().put("hibernate.dialect", hibernateDialect);
-            return em;
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to configure EntityManagerFactory", e);
-        }
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(dataSource());
+        em.setPackagesToScan("ai.shreds.domain");
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        em.setJpaVendorAdapter(vendorAdapter);
+        em.getJpaPropertyMap().put("hibernate.dialect", hibernateDialect);
+        return em;
     }
 
     /**
@@ -97,12 +74,8 @@ public class InfrastructureDatabaseConfig {
      */
     @Bean
     public PlatformTransactionManager transactionManager() {
-        try {
-            JpaTransactionManager transactionManager = new JpaTransactionManager();
-            transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
-            return transactionManager;
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to configure TransactionManager", e);
-        }
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+        return transactionManager;
     }
 }

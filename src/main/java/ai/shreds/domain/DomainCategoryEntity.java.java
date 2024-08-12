@@ -1,9 +1,16 @@
 package ai.shreds.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "Category")
 public class DomainCategoryEntity {
@@ -25,16 +32,6 @@ public class DomainCategoryEntity {
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DomainCategoryEntity> children = new ArrayList<>();
-
-    public DomainCategoryEntity() {}
-
-    public DomainCategoryEntity(Long id, String name, Long parentId, DomainCategoryEntity parent, List<DomainCategoryEntity> children) {
-        this.id = id;
-        this.name = name;
-        this.parentId = parentId;
-        this.parent = parent;
-        this.children = children;
-    }
 
     public Long getId() {
         return id;

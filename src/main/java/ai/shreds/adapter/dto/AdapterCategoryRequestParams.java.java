@@ -1,4 +1,4 @@
-package ai.shreds.adapter;
+package ai.shreds.adapter.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

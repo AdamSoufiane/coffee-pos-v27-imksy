@@ -1,4 +1,4 @@
-package ai.shreds.adapter;
+package ai.shreds.adapter.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -21,16 +21,4 @@ public class AdapterCategoryResponseDTO {
 
     @JsonProperty("parent_id")
     private Long parentId;
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Long getParentId() {
-        return parentId;
-    }
 }

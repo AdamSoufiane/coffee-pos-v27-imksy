@@ -1,7 +1,6 @@
 package ai.shreds.domain;
 
 import ai.shreds.shared.SharedCategoryDTO;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -11,10 +10,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class DomainCategoryService implements DomainCategoryServicePort {
     private final DomainCategoryRepositoryPort categoryRepository;
     private static final Logger logger = LoggerFactory.getLogger(DomainCategoryService.class);
+
+    public DomainCategoryService(DomainCategoryRepositoryPort categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
 
     @Override
     public void validateCategoryData(DomainCategoryEntity category) {
@@ -23,8 +25,8 @@ public class DomainCategoryService implements DomainCategoryServicePort {
             throw new IllegalArgumentException("Category name cannot be null or empty");
         }
         if (category.getParentId() != null) {
-            Optional<DomainCategoryEntity> parentCategory = categoryRepository.findById(category.getParentId());
-            if (!parentCategory.isPresent()) {
+            DomainCategoryEntity parentCategory = categoryRepository.findById(category.getParentId());
+            if (parentCategory == null) {
                 throw new IllegalArgumentException("Parent category does not exist");
             }
         }
@@ -33,7 +35,7 @@ public class DomainCategoryService implements DomainCategoryServicePort {
     @Override
     public boolean checkCategoryExistence(Long id) {
         logger.info("Checking existence of category with id: {}", id);
-        return categoryRepository.findById(id).isPresent();
+        return categoryRepository.findById(id) != null;
     }
 
     @Override

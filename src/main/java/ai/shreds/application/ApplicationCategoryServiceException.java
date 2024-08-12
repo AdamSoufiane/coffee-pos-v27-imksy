@@ -11,12 +11,6 @@ public class ApplicationCategoryServiceException {
 
     private static final Logger logger = LoggerFactory.getLogger(ApplicationCategoryServiceException.class);
 
-    /**
-     * Handles various exceptions and returns appropriate error messages.
-     *
-     * @param e the exception to handle
-     * @return a string message describing the error
-     */
     public String handleException(Exception e) {
         logger.error("Exception occurred: ", e);
 

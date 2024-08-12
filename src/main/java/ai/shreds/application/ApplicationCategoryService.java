@@ -2,10 +2,10 @@ package ai.shreds.application;
 
 import ai.shreds.adapter.AdapterCategoryRequestParams;
 import ai.shreds.adapter.AdapterCategoryResponseDTO;
+import ai.shreds.adapter.AdapterCategoryMapper;
 import ai.shreds.domain.DomainCategoryEntity;
 import ai.shreds.domain.DomainCategoryRepositoryPort;
 import ai.shreds.domain.DomainCategoryServicePort;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -14,20 +14,25 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class ApplicationCategoryService implements ApplicationCreateCategoryInputPort, ApplicationUpdateCategoryInputPort, ApplicationDeleteCategoryInputPort, ApplicationRetrieveCategoryHierarchyInputPort {
     private final DomainCategoryRepositoryPort domainCategoryRepositoryPort;
     private final DomainCategoryServicePort domainCategoryServicePort;
-    private final ApplicationCategoryMapper applicationCategoryMapper;
+    private final AdapterCategoryMapper applicationCategoryMapper;
     private static final Logger logger = LoggerFactory.getLogger(ApplicationCategoryService.class);
+
+    public ApplicationCategoryService(DomainCategoryRepositoryPort domainCategoryRepositoryPort, DomainCategoryServicePort domainCategoryServicePort, AdapterCategoryMapper applicationCategoryMapper) {
+        this.domainCategoryRepositoryPort = domainCategoryRepositoryPort;
+        this.domainCategoryServicePort = domainCategoryServicePort;
+        this.applicationCategoryMapper = applicationCategoryMapper;
+    }
 
     @Override
     public AdapterCategoryResponseDTO createCategory(AdapterCategoryRequestParams request) {
         if (request == null) {
             throw new IllegalArgumentException("Request cannot be null");
         }
-        logger.info("Creating category with name: {} and parent_id: {}", request.getName(), request.getParent_id());
-        DomainCategoryEntity categoryEntity = applicationCategoryMapper.toDomainDTO(request);
+        logger.info("Creating category with name: {} and parent_id: {}", request.getName(), request.getParentId());
+        DomainCategoryEntity categoryEntity = applicationCategoryMapper.toDomainEntity(request);
         domainCategoryServicePort.validateCategoryData(categoryEntity);
         DomainCategoryEntity savedEntity = domainCategoryRepositoryPort.save(categoryEntity);
         return applicationCategoryMapper.toAdapterDTO(savedEntity);
@@ -40,7 +45,7 @@ public class ApplicationCategoryService implements ApplicationCreateCategoryInpu
         }
         logger.info("Updating category with id: {}", id);
         domainCategoryServicePort.checkCategoryExistence(id);
-        DomainCategoryEntity categoryEntity = applicationCategoryMapper.toDomainDTO(request);
+        DomainCategoryEntity categoryEntity = applicationCategoryMapper.toDomainEntity(request);
         categoryEntity.setId(id);
         domainCategoryServicePort.validateCategoryData(categoryEntity);
         DomainCategoryEntity updatedEntity = domainCategoryRepositoryPort.save(categoryEntity);
