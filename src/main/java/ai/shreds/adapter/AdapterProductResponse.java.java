@@ -58,4 +58,12 @@ public class AdapterProductResponse {
      * Message related to the response.
      */
     private String message;
+
+    /**
+     * Sets the message for the response.
+     * @param message the message to set
+     */
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

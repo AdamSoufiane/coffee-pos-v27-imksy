@@ -22,10 +22,6 @@ public class InfrastructureInventoryServiceClient implements DomainInventoryServ
         this.inventoryRepository = inventoryRepository;
     }
 
-    /**
-     * Updates the inventory for a given product.
-     * @param product the product to update inventory for
-     */
     @Override
     public void updateInventory(DomainProductEntity product) {
         // Log entry
@@ -46,6 +42,8 @@ public class InfrastructureInventoryServiceClient implements DomainInventoryServ
 
         // Update the inventory details based on the product changes
         inventory.setAvailableQuantity(product.getStockQuantity());
+        // You can add more logic here if needed
+
         // Save the updated inventory details back to the repository
         inventoryRepository.update(inventory);
 
@@ -53,11 +51,6 @@ public class InfrastructureInventoryServiceClient implements DomainInventoryServ
         logger.info("Inventory updated successfully for product: {}", product.getId());
     }
 
-    /**
-     * Retrieves the inventory details for a given product.
-     * @param productId the product id
-     * @return the inventory details
-     */
     @Override
     public DomainInventoryEntity getInventoryByProductId(UUID productId) {
         // Log entry
@@ -73,5 +66,13 @@ public class InfrastructureInventoryServiceClient implements DomainInventoryServ
         // Log exit
         logger.info("Inventory retrieved successfully for product id: {}", productId);
         return inventory;
+    }
+
+    @Override
+    public void validateUUIDFormat(UUID id) {
+        if (id == null) {
+            throw new IllegalArgumentException("UUID cannot be null.");
+        }
+        // Additional validation logic can be added here if needed
     }
 }

@@ -24,6 +24,7 @@ import java.util.UUID;
 @Table(name = "products")
 public class DomainProductEntity {
     @Id
+    @Column(nullable = false)
     private UUID id;
 
     @NotNull

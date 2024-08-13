@@ -1,11 +1,10 @@
 package ai.shreds.adapter;
 
 import ai.shreds.domain.DomainProductEntity;
-import ai.shreds.adapter.AdapterCreateProductRequest;
-import ai.shreds.adapter.AdapterUpdateProductRequest;
+import adapter.AdapterCreateProductRequest;
+import adapter.AdapterUpdateProductRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
@@ -19,8 +18,8 @@ public interface AdapterProductMapper {
     @Mapping(target = "price", source = "request.price")
     @Mapping(target = "categoryId", source = "request.category_id")
     @Mapping(target = "stockQuantity", source = "request.stock_quantity")
-    @Mapping(target = "createdAt", expression = "java(new java.sql.Timestamp(System.currentTimeMillis()))")
-    @Mapping(target = "updatedAt", expression = "java(new java.sql.Timestamp(System.currentTimeMillis()))")
+    @Mapping(target = "createdAt", expression = "java(java.time.LocalDateTime.now())")
+    @Mapping(target = "updatedAt", expression = "java(java.time.LocalDateTime.now())")
     DomainProductEntity mapToDomainEntity(AdapterCreateProductRequest request);
 
     @Mapping(target = "id", source = "request.id")
@@ -29,7 +28,7 @@ public interface AdapterProductMapper {
     @Mapping(target = "price", source = "request.price")
     @Mapping(target = "categoryId", source = "request.category_id")
     @Mapping(target = "stockQuantity", source = "request.stock_quantity")
-    @Mapping(target = "updatedAt", expression = "java(new java.sql.Timestamp(System.currentTimeMillis()))")
+    @Mapping(target = "updatedAt", expression = "java(java.time.LocalDateTime.now())")
     void mapToDomainEntity(AdapterUpdateProductRequest request, @MappingTarget DomainProductEntity entity);
 
     @Mapping(target = "id", source = "entity.id")

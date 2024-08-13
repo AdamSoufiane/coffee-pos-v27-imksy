@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.UUID;
-import org.springframework.dao.DataAccessException;
 
 @Service
 @RequiredArgsConstructor
@@ -41,17 +40,16 @@ public class ApplicationProductService implements ApplicationCreateProductInputP
     public AdapterProductResponse updateProduct(UUID id, AdapterUpdateProductRequest request) {
         validateUpdateProductRequest(id, request);
         try {
-            DomainProductEntity existingProduct = domainProductRepositoryPort.findById(id);
-            if (existingProduct == null) {
-                throw new ApplicationProductServiceException("Product with ID " + id + " not found.");
+            DomainProductEntity productEntity = domainProductRepositoryPort.findById(id);
+            if (productEntity == null) {
+                throw new InvalidProductDataException("Product with ID " + id + " does not exist.");
             }
-            DomainProductEntity productEntity = adapterProductMapper.mapToDomainEntity(request);
-            productEntity.setId(id);
+            adapterProductMapper.mapToDomainEntity(request, productEntity);
             domainProductRepositoryPort.save(productEntity);
             domainInventoryServicePort.updateInventory(productEntity);
             return adapterProductMapper.mapToAdapterResponse(productEntity);
-        } catch (DataAccessException e) {
-            throw new ApplicationProductServiceException("Error updating product with ID " + id + ". " + e.getMessage(), e);
+        } catch (Exception e) {
+            throw new ApplicationProductServiceException(e.getMessage(), e);
         }
     }
 
@@ -62,12 +60,12 @@ public class ApplicationProductService implements ApplicationCreateProductInputP
         try {
             DomainProductEntity productEntity = domainProductRepositoryPort.findById(id);
             if (productEntity == null) {
-                throw new ApplicationProductServiceException("Product with ID " + id + " not found.");
+                throw new InvalidProductDataException("Product with ID " + id + " does not exist.");
             }
             domainProductRepositoryPort.deleteById(id);
-            domainInventoryServicePort.updateInventory(productEntity);
-        } catch (DataAccessException e) {
-            throw new ApplicationProductServiceException("Error deleting product with ID " + id + ". " + e.getMessage(), e);
+            domainInventoryServicePort.deleteInventoryByProductId(id);
+        } catch (Exception e) {
+            throw new ApplicationProductServiceException(e.getMessage(), e);
         }
     }
 
@@ -97,12 +95,6 @@ public class ApplicationProductService implements ApplicationCreateProductInputP
         if (id == null) {
             throw new InvalidProductDataException("Product ID is required.");
         }
-    }
-}
-
-class ApplicationProductServiceException extends RuntimeException {
-    public ApplicationProductServiceException(String message, Throwable cause) {
-        super(message, cause);
     }
 }
 

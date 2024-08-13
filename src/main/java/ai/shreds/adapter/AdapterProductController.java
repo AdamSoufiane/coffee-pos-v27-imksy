@@ -3,9 +3,10 @@ package ai.shreds.adapter;
 import ai.shreds.application.ApplicationCreateProductInputPort;
 import ai.shreds.application.ApplicationUpdateProductInputPort;
 import ai.shreds.application.ApplicationDeleteProductInputPort;
-import ai.shreds.shared.AdapterCreateProductRequest;
-import ai.shreds.shared.AdapterUpdateProductRequest;
-import ai.shreds.shared.AdapterProductResponse;
+import ai.shreds.domain.DomainProductEntity;
+import ai.shreds.adapter.AdapterCreateProductRequest;
+import ai.shreds.adapter.AdapterUpdateProductRequest;
+import ai.shreds.adapter.AdapterProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,10 +42,8 @@ public class AdapterProductController {
     public ResponseEntity<AdapterProductResponse> createProduct(@Valid @RequestBody AdapterCreateProductRequest request) {
         try {
             logger.info("Creating product with name: {}", request.getName());
-            DomainProductEntity productEntity = productMapper.mapToDomainEntity(request);
-            DomainProductEntity createdProduct = createProductPort.createProduct(productEntity);
-            AdapterProductResponse response = productMapper.mapToAdapterResponse(createdProduct);
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+            AdapterProductResponse createdProduct = createProductPort.createProduct(request);
+            return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
         } catch (Exception e) {
             logger.error("Error creating product", e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -55,10 +54,8 @@ public class AdapterProductController {
     public ResponseEntity<AdapterProductResponse> updateProduct(@PathVariable UUID id, @Valid @RequestBody AdapterUpdateProductRequest request) {
         try {
             logger.info("Updating product with id: {}", id);
-            DomainProductEntity productEntity = productMapper.mapToDomainEntity(request);
-            DomainProductEntity updatedProduct = updateProductPort.updateProduct(id, productEntity);
-            AdapterProductResponse response = productMapper.mapToAdapterResponse(updatedProduct);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            AdapterProductResponse updatedProduct = updateProductPort.updateProduct(id, request);
+            return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error updating product with id: {}", id, e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

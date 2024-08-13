@@ -1,6 +1,11 @@
 package ai.shreds.domain;
 
 import java.util.UUID;
+import ai.shreds.domain.DomainProductEntity;
+import ai.shreds.domain.InventoryUpdateException;
+import ai.shreds.domain.DomainInventoryEntity;
+import ai.shreds.domain.InventoryNotFoundException;
+import ai.shreds.domain.InvalidUUIDFormatException;
 
 /**
  * Interface for inventory-related operations in the domain layer.

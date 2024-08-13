@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
 import javax.validation.constraints.NotNull;
+import org.slf4j.LoggerFactory;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -15,7 +16,7 @@ public class DomainInventoryService implements DomainInventoryServicePort {
     private final DomainInventoryRepositoryPort inventoryRepository;
 
     @Override
-    public void updateInventoryDetails(@NotNull DomainProductEntity product) {
+    public void updateInventory(@NotNull DomainProductEntity product) {
         // Validate product data
         validateProductData(product);
 
@@ -37,7 +38,7 @@ public class DomainInventoryService implements DomainInventoryServicePort {
     }
 
     @Override
-    public DomainInventoryEntity getInventoryDetailsForProduct(@NotNull UUID id) {
+    public DomainInventoryEntity getInventoryByProductId(@NotNull UUID id) {
         // Validate product ID
         validateProductId(id);
 
@@ -62,17 +63,31 @@ public class DomainInventoryService implements DomainInventoryServicePort {
         if (id == null) {
             throw new IllegalArgumentException("Invalid product ID");
         }
+        validateUUIDFormat(id);
     }
 
-    public class InventoryUpdateException extends RuntimeException {
+    @Override
+    public void validateUUIDFormat(UUID id) {
+        if (id.toString().length() != 36) {
+            throw new InvalidUUIDFormatException("Invalid UUID format");
+        }
+    }
+
+    public static class InventoryUpdateException extends RuntimeException {
         public InventoryUpdateException(String message, Throwable cause) {
             super(message, cause);
         }
     }
 
-    public class InventoryRetrievalException extends RuntimeException {
+    public static class InventoryRetrievalException extends RuntimeException {
         public InventoryRetrievalException(String message, Throwable cause) {
             super(message, cause);
+        }
+    }
+
+    public static class InvalidUUIDFormatException extends RuntimeException {
+        public InvalidUUIDFormatException(String message) {
+            super(message);
         }
     }
 }

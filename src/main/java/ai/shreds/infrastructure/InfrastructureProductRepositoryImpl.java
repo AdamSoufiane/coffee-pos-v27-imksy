@@ -5,6 +5,7 @@ import ai.shreds.domain.DomainProductRepositoryPort;
 import org.springframework.stereotype.Repository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,7 +19,7 @@ import java.util.UUID;
 public class InfrastructureProductRepositoryImpl implements DomainProductRepositoryPort {
 
     @PersistenceContext
-    private final EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Override
     public void save(DomainProductEntity entity) {
@@ -35,7 +36,9 @@ public class InfrastructureProductRepositoryImpl implements DomainProductReposit
     public DomainProductEntity findById(UUID id) {
         try {
             DomainProductEntity entity = entityManager.find(DomainProductEntity.class, id);
-            log.info("Product found: {}", entity);
+            if (entity != null) {
+                log.info("Product found: {}", entity);
+            }
             return entity;
         } catch (Exception e) {
             log.error("Error finding product with id: {}", id, e);

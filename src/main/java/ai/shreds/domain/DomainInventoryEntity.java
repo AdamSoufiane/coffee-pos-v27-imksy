@@ -5,8 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.UUID;
-import java.util.Date;
+import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
@@ -29,11 +30,12 @@ public class DomainInventoryEntity {
     private Integer reservedQuantity;
 
     @NotNull
+    @Size(max = 255)
     @Column(name = "warehouse_location", nullable = false, length = 255)
     private String warehouseLocation;
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "last_checked", nullable = false)
-    private Date lastChecked;
+    private Timestamp lastChecked;
 }

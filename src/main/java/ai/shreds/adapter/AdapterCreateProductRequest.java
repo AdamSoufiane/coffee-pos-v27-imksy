@@ -1,4 +1,4 @@
-package adapter;
+package ai.shreds.adapter;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -17,8 +17,9 @@ public class ApplicationProductServiceException {
     public ResponseEntity<AdapterProductResponse> handleException(Exception exception) {
         logger.error("Exception occurred: ", exception);
 
-        AdapterProductResponse response = new AdapterProductResponse();
-        response.setMessage("An unexpected error occurred while processing your request.");
+        AdapterProductResponse response = AdapterProductResponse.builder()
+            .message("An unexpected error occurred while processing your request.")
+            .build();
 
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -27,8 +28,9 @@ public class ApplicationProductServiceException {
     public ResponseEntity<AdapterProductResponse> handleProductNotFoundException(ProductNotFoundException exception) {
         logger.error("Product not found: ", exception);
 
-        AdapterProductResponse response = new AdapterProductResponse();
-        response.setMessage("Product not found.");
+        AdapterProductResponse response = AdapterProductResponse.builder()
+            .message("Product not found.")
+            .build();
 
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
@@ -37,8 +39,9 @@ public class ApplicationProductServiceException {
     public ResponseEntity<AdapterProductResponse> handleValidationException(ValidationException exception) {
         logger.error("Validation error: ", exception);
 
-        AdapterProductResponse response = new AdapterProductResponse();
-        response.setMessage("Invalid product data: " + exception.getMessage());
+        AdapterProductResponse response = AdapterProductResponse.builder()
+            .message("Invalid product data: " + exception.getMessage())
+            .build();
 
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
