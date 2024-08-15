@@ -58,9 +58,11 @@ public class InfrastructureKafkaConfig {
     private void validateKafkaProperties(Map<String, Object> configProps) {
         if (!configProps.containsKey(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG)) {
             throw new IllegalArgumentException("Bootstrap servers not configured");
-        } else if (!configProps.containsKey(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG)) {
+        }
+        if (!configProps.containsKey(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG)) {
             throw new IllegalArgumentException("Key serializer not configured");
-        } else if (!configProps.containsKey(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG)) {
+        }
+        if (!configProps.containsKey(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG)) {
             throw new IllegalArgumentException("Value serializer not configured");
         }
     }
@@ -70,12 +72,10 @@ public class InfrastructureKafkaConfig {
      */
     private static class KafkaProducerListener implements org.springframework.kafka.support.ProducerListener<String, Object> {
 
-        @Override
         public void onSuccess(String topic, Integer partition, String key, Object value, org.apache.kafka.clients.producer.RecordMetadata recordMetadata) {
             logger.info("Message sent successfully to topic {} partition {} with key {}", topic, partition, key);
         }
 
-        @Override
         public void onError(String topic, Integer partition, String key, Object value, Exception exception) {
             logger.error("Error sending message to topic {} partition {} with key {}", topic, partition, key, exception);
         }

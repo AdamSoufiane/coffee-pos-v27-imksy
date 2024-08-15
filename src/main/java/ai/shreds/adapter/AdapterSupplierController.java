@@ -1,13 +1,13 @@
 package ai.shreds.adapter;
 
+import shared.ApplicationCreateSupplierDTO;
+import shared.ApplicationUpdateSupplierDTO;
 import ai.shreds.application.ApplicationCreateSupplierInputPort;
 import ai.shreds.application.ApplicationGetSupplierByIdInputPort;
 import ai.shreds.application.ApplicationGetAllSuppliersInputPort;
 import ai.shreds.application.ApplicationUpdateSupplierInputPort;
 import ai.shreds.application.ApplicationDeleteSupplierInputPort;
-import ai.shreds.shared.ApplicationCreateSupplierDTO;
-import ai.shreds.shared.ApplicationUpdateSupplierDTO;
-import ai.shreds.shared.ApplicationSupplierDTO;
+import ai.shreds.application.ApplicationSupplierDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package ai.shreds.domain;
+package ai.shreds.infrastructure.jpa;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,10 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -19,26 +15,32 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DomainSupplierEntity {
+public class SupplierEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
     @Column(nullable = false)
     private String name;
 
-    @Embedded
-    private DomainContactInfoValue contactInfo;
-
-    @Embedded
-    private DomainAddressValue address;
-
-    @NotBlank
     @Column(nullable = false, unique = true)
     private String rc;
 
-    @Future
+    @Column(nullable = false)
+    private String contactInfoPhone;
+
+    @Column(nullable = false)
+    private String contactInfoEmail;
+
+    @Column(nullable = false)
+    private String address;
+
+    @Column(nullable = false)
+    private String zipCode;
+
+    @Column(nullable = false)
+    private String city;
+
     @Column(nullable = false)
     private Date echeanceDate;
 

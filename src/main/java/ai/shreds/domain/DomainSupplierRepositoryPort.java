@@ -1,8 +1,6 @@
 package ai.shreds.domain;
 
 import java.util.List;
-import ai.shreds.domain.DomainSupplierEntity;
-import ai.shreds.domain.EntityNotFoundException;
 
 /**
  * DomainSupplierRepositoryPort is an interface that defines the contract for CRUD operations on Supplier entities.
@@ -20,9 +18,8 @@ public interface DomainSupplierRepositoryPort {
      *
      * @param id the ID of the supplier entity to be found
      * @return the found supplier entity
-     * @throws EntityNotFoundException if no supplier entity is found with the given ID
      */
-    DomainSupplierEntity findById(Long id) throws EntityNotFoundException;
+    DomainSupplierEntity findById(Long id);
 
     /**
      * Finds all supplier entities in the database.
@@ -35,7 +32,6 @@ public interface DomainSupplierRepositoryPort {
      * Deletes a supplier entity by its ID.
      *
      * @param id the ID of the supplier entity to be deleted
-     * @throws EntityNotFoundException if no supplier entity is found with the given ID
      */
-    void deleteById(Long id) throws EntityNotFoundException;
+    void deleteById(Long id);
 }

@@ -1,17 +1,14 @@
-package ai.shreds.application;
+package shared;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.sql.Timestamp;
+import lombok.AllArgsConstructor;
 import java.util.Date;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApplicationSupplierDTO {
-    private Long id;
+public class ApplicationCreateSupplierDTO {
     private String name;
     private String contact_info_phone;
     private String contact_info_email;
@@ -20,6 +17,4 @@ public class ApplicationSupplierDTO {
     private String city;
     private String rc;
     private Date echeance_date;
-    private Timestamp created_at;
-    private Timestamp updated_at;
 }

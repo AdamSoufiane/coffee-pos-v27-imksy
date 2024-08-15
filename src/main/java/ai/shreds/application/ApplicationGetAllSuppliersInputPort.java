@@ -1,6 +1,6 @@
 package ai.shreds.application;
 
-import ai.shreds.shared.ApplicationSupplierDTO;
+import ai.shreds.application.ApplicationSupplierDTO;
 import java.util.List;
 
 /**

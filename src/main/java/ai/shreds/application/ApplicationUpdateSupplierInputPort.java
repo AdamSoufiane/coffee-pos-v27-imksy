@@ -1,7 +1,7 @@
 package ai.shreds.application;
 
-import ai.shreds.shared.ApplicationUpdateSupplierDTO;
-import ai.shreds.shared.ApplicationSupplierDTO;
+import shared.ApplicationUpdateSupplierDTO;
+import ai.shreds.application.ApplicationSupplierDTO;
 
 /**
  * Interface for updating an existing supplier record in the database.

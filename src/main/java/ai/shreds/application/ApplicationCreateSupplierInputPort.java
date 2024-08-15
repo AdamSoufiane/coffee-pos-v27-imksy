@@ -1,7 +1,7 @@
 package ai.shreds.application;
 
-import ai.shreds.shared.ApplicationCreateSupplierDTO;
-import ai.shreds.shared.ApplicationSupplierDTO;
+import ai.shreds.application.ApplicationSupplierDTO;
+import shared.ApplicationCreateSupplierDTO;
 
 /**
  * Interface for creating a new supplier record.

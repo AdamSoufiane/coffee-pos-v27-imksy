@@ -1,9 +1,9 @@
 package ai.shreds.infrastructure;
 
 import ai.shreds.domain.DomainSupplierEntity;
+import ai.shreds.domain.DomainSupplierRepositoryPort;
 import ai.shreds.domain.DomainContactInfoValue;
 import ai.shreds.domain.DomainAddressValue;
-import ai.shreds.domain.DomainSupplierRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.persistence.EntityNotFoundException;
+
+import ai.shreds.infrastructure.jpa.SupplierJpaRepository;
+import ai.shreds.infrastructure.jpa.SupplierEntity;
 
 @Repository
 @RequiredArgsConstructor
@@ -24,7 +28,7 @@ public class InfrastructureSupplierRepositoryImpl implements DomainSupplierRepos
     @Transactional
     public void save(DomainSupplierEntity supplier) {
         try {
-            SupplierEntity supplierEntity = mapToSupplierEntity(supplier);
+            ai.shreds.infrastructure.jpa.SupplierEntity supplierEntity = mapToSupplierEntity(supplier);
             supplierJpaRepository.save(supplierEntity);
         } catch (Exception e) {
             logger.error("Error saving supplier: ", e);
@@ -35,8 +39,9 @@ public class InfrastructureSupplierRepositoryImpl implements DomainSupplierRepos
     @Override
     public DomainSupplierEntity findById(Long id) {
         try {
-            Optional<SupplierEntity> optionalSupplierEntity = supplierJpaRepository.findById(id);
-            return optionalSupplierEntity.map(this::mapToDomainSupplierEntity).orElse(null);
+            return supplierJpaRepository.findById(id)
+                .map(this::mapToDomainSupplierEntity)
+                .orElseThrow(() -> new EntityNotFoundException("Supplier with ID " + id + " not found"));
         } catch (Exception e) {
             logger.error("Error finding supplier by ID: ", e);
             throw new RuntimeException("Error finding supplier by ID", e);
@@ -46,7 +51,7 @@ public class InfrastructureSupplierRepositoryImpl implements DomainSupplierRepos
     @Override
     public List<DomainSupplierEntity> findAll() {
         try {
-            List<SupplierEntity> supplierEntities = supplierJpaRepository.findAll();
+            List<ai.shreds.infrastructure.jpa.SupplierEntity> supplierEntities = supplierJpaRepository.findAll();
             return supplierEntities.stream().map(this::mapToDomainSupplierEntity).collect(Collectors.toList());
         } catch (Exception e) {
             logger.error("Error finding all suppliers: ", e);
@@ -65,9 +70,9 @@ public class InfrastructureSupplierRepositoryImpl implements DomainSupplierRepos
         }
     }
 
-    private SupplierEntity mapToSupplierEntity(DomainSupplierEntity domainSupplierEntity) {
+    private ai.shreds.infrastructure.jpa.SupplierEntity mapToSupplierEntity(DomainSupplierEntity domainSupplierEntity) {
         if (domainSupplierEntity == null) return null;
-        SupplierEntity supplierEntity = new SupplierEntity();
+        ai.shreds.infrastructure.jpa.SupplierEntity supplierEntity = new ai.shreds.infrastructure.jpa.SupplierEntity();
         supplierEntity.setId(domainSupplierEntity.getId());
         supplierEntity.setName(domainSupplierEntity.getName());
         supplierEntity.setRc(domainSupplierEntity.getRc());
@@ -82,7 +87,7 @@ public class InfrastructureSupplierRepositoryImpl implements DomainSupplierRepos
         return supplierEntity;
     }
 
-    private DomainSupplierEntity mapToDomainSupplierEntity(SupplierEntity supplierEntity) {
+    private DomainSupplierEntity mapToDomainSupplierEntity(ai.shreds.infrastructure.jpa.SupplierEntity supplierEntity) {
         if (supplierEntity == null) return null;
         DomainSupplierEntity domainSupplierEntity = new DomainSupplierEntity();
         domainSupplierEntity.setId(supplierEntity.getId());

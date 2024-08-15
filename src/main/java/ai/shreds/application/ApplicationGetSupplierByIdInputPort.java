@@ -1,6 +1,6 @@
 package ai.shreds.application;
 
-import ai.shreds.shared.ApplicationSupplierDTO;
+import shared.ApplicationSupplierDTO;
 
 /**
  * Interface for retrieving supplier details by their unique identifier.
