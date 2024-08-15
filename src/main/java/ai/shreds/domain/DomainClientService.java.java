@@ -22,7 +22,6 @@ public class DomainClientService {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    @Transactional
     public void validateClientData(ApplicationClientDTO dto) {
         logger.info("Validating client data");
         validateFields(dto);
@@ -35,22 +34,22 @@ public class DomainClientService {
         if (dto.getLastName() == null || dto.getLastName().isEmpty()) {
             throw new IllegalArgumentException("Last name is required.");
         }
-        if (dto.getContactInfo().getEmail() == null || dto.getContactInfo().getEmail().isEmpty()) {
+        if (dto.getContact_info().getEmail() == null || dto.getContact_info().getEmail().isEmpty()) {
             throw new IllegalArgumentException("Email is required.");
         }
-        if (!isValidEmail(dto.getContactInfo().getEmail())) {
+        if (!isValidEmail(dto.getContact_info().getEmail())) {
             throw new IllegalArgumentException("Invalid email format.");
         }
-        if (dto.getContactInfo().getPhone() == null || dto.getContactInfo().getPhone().isEmpty()) {
+        if (dto.getContact_info().getPhone() == null || dto.getContact_info().getPhone().isEmpty()) {
             throw new IllegalArgumentException("Phone number is required.");
         }
-        if (!isValidPhoneNumber(dto.getContactInfo().getPhone())) {
+        if (!isValidPhoneNumber(dto.getContact_info().getPhone())) {
             throw new IllegalArgumentException("Invalid phone number format.");
         }
         if (dto.getAddress().getAddress() == null || dto.getAddress().getAddress().isEmpty()) {
             throw new IllegalArgumentException("Address is required.");
         }
-        if (dto.getAddress().getZipCode() == null || dto.getAddress().getZipCode().isEmpty()) {
+        if (dto.getAddress().getZip_code() == null || dto.getAddress().getZip_code().isEmpty()) {
             throw new IllegalArgumentException("Zip code is required.");
         }
         if (dto.getAddress().getCity() == null || dto.getAddress().getCity().isEmpty()) {
@@ -65,8 +64,8 @@ public class DomainClientService {
                 dto.getClientId(),
                 dto.getFirstName(),
                 dto.getLastName(),
-                new DomainContactInfoValue(dto.getContactInfo().getPhone(), dto.getContactInfo().getEmail()),
-                new DomainAddressValue(dto.getAddress().getAddress(), dto.getAddress().getZipCode(), dto.getAddress().getCity()),
+                new DomainContactInfoValue(dto.getContact_info().getPhone(), dto.getContact_info().getEmail()),
+                new DomainAddressValue(dto.getAddress().getAddress(), dto.getAddress().getZip_code(), dto.getAddress().getCity()),
                 dto.getRegistrationDate()
         );
         try {
@@ -78,7 +77,23 @@ public class DomainClientService {
             );
         } catch (Exception e) {
             logger.error("Failed to process client registration", e);
+            // Handle failure
         }
+    }
+
+    @Transactional
+    public DomainClientEntity saveClient(ApplicationClientDTO dto) {
+        logger.info("Saving client entity");
+        DomainClientEntity clientEntity = new DomainClientEntity(
+                dto.getClientId(),
+                dto.getFirstName(),
+                dto.getLastName(),
+                new DomainContactInfoValue(dto.getContact_info().getPhone(), dto.getContact_info().getEmail()),
+                new DomainAddressValue(dto.getAddress().getAddress(), dto.getAddress().getZip_code(), dto.getAddress().getCity()),
+                dto.getRegistrationDate()
+        );
+        domainClientRepositoryPort.save(clientEntity);
+        return clientEntity;
     }
 
     private boolean isValidEmail(String email) {

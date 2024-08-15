@@ -52,23 +52,9 @@ public class InfrastructureClientEntityMapper {
         infrastructureEntity.setEmail(entity.getContactInfo().getEmail());
         infrastructureEntity.setPhoneNumber(entity.getContactInfo().getPhone());
         infrastructureEntity.setAddress(entity.getAddress().getAddress());
-        infrastructureEntity.setZipCode(entity.getAddress().getZipCode());
+        infrastructureEntity.setZipCode(entity.getAddress().getZip_code());
         infrastructureEntity.setCity(entity.getAddress().getCity());
         infrastructureEntity.setRegistrationDate(entity.getRegistrationDate());
         return infrastructureEntity;
     }
-}
-
-@Getter
-@Setter
-class InfrastructureClientEntity {
-    private UUID clientId;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String phoneNumber;
-    private String address;
-    private String zipCode;
-    private String city;
-    private LocalDateTime registrationDate;
 }

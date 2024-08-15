@@ -2,13 +2,14 @@ package ai.shreds.infrastructure;
 
 import ai.shreds.domain.DomainClientEntity;
 import ai.shreds.domain.DomainClientRepositoryPort;
+import infrastructure.ClientJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Optional;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.Optional;
 
 @Repository
 public class InfrastructureClientRepositoryImpl implements DomainClientRepositoryPort {
@@ -37,8 +38,7 @@ public class InfrastructureClientRepositoryImpl implements DomainClientRepositor
 
     @Override
     public DomainClientEntity findById(UUID id) {
-        return repository.findById(id)
-                .map(infrastructureClientEntityMapper::toDomain)
-                .orElse(null);
+        Optional<InfrastructureClientEntity> entityOptional = repository.findById(id);
+        return entityOptional.map(infrastructureClientEntityMapper::toDomain).orElse(null);
     }
 }

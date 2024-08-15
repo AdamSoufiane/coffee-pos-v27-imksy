@@ -1,7 +1,5 @@
 package ai.shreds.application;
 
-import ai.shreds.application.ApplicationClientInputPort;
-import ai.shreds.application.ApplicationClientDTO;
 import ai.shreds.domain.DomainClientService;
 import ai.shreds.domain.DomainClientEntity;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +37,7 @@ public class ApplicationClientService implements ApplicationClientInputPort {
 
             // Return the registered client details
             logger.info("Client registration successful.");
-            return ApplicationClientDTO.fromEntity(registeredEntity);
+            return registeredEntity.toDTO();
         } catch (Exception e) {
             logger.error("Error during client registration: ", e);
             throw new RuntimeException("Client registration failed", e);
