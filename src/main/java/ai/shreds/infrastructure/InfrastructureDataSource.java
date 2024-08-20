@@ -1,20 +1,15 @@
 package ai.shreds.infrastructure;
 
+import javax.sql.DataSource;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import javax.sql.DataSource;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import ai.shreds.infrastructure.InfrastructureDatabaseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Configuration
-@NoArgsConstructor
-@Getter
-@Setter
-@Slf4j
 public class InfrastructureDataSource {
 
     @Value("${spring.datasource.url}")
@@ -28,6 +23,8 @@ public class InfrastructureDataSource {
 
     @Value("${spring.datasource.driver-class-name}")
     private String driverClassName;
+
+    private static final Logger log = LoggerFactory.getLogger(InfrastructureDataSource.class);
 
     /**
      * Configures and provides a DataSource bean for database interactions.

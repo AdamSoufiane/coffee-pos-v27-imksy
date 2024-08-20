@@ -6,23 +6,21 @@ import ai.shreds.adapter.AdapterSupplierTransactionMapper;
 import ai.shreds.domain.DomainSaveSupplierTransactionPort;
 import ai.shreds.domain.DomainCalculateTotalAmountPort;
 import ai.shreds.domain.DomainSupplierTransaction;
-import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ai.shreds.application.ApplicationSendInventoryUpdateNotificationOutputPort;
-import ai.shreds.application.ApplicationStoreSupplierTransactionInputPort;
-import ai.shreds.application.ApplicationStoreSupplierTransactionException;
+import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
+import java.util.UUID;
+import java.sql.Timestamp;
+import java.util.List;
+import java.math.BigDecimal;
 import java.util.stream.Collectors;
 
-/**
- * Service class for storing supplier transactions.
+/** 
+ * Service class for storing supplier transactions. 
  */
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ApplicationStoreSupplierTransactionService implements ApplicationStoreSupplierTransactionInputPort {
 
     private static final Logger logger = LoggerFactory.getLogger(ApplicationStoreSupplierTransactionService.class);
@@ -32,16 +30,10 @@ public class ApplicationStoreSupplierTransactionService implements ApplicationSt
     private final ApplicationSendInventoryUpdateNotificationOutputPort applicationSendInventoryUpdateNotificationOutputPort;
     private final AdapterSupplierTransactionMapper adapterSupplierTransactionMapper;
 
-    /**
-     * Stores a supplier transaction.
-     *
-     * @param params the transaction details
-     * @return the stored transaction details
-     */
     @Override
     public AdapterResponseDTO storeSupplierTransaction(AdapterRequestParams params) {
         try {
-            log.info("Starting to store supplier transaction");
+            logger.info("Starting to store supplier transaction");
 
             // Convert AdapterRequestParams to DomainSupplierTransaction
             DomainSupplierTransaction domainSupplierTransaction = adapterSupplierTransactionMapper.toDomain(params);
@@ -59,21 +51,16 @@ public class ApplicationStoreSupplierTransactionService implements ApplicationSt
             AdapterResponseDTO responseDTO = toResponseDTO(domainSupplierTransaction);
             applicationSendInventoryUpdateNotificationOutputPort.sendInventoryUpdateNotification(responseDTO);
 
-            log.info("Successfully stored supplier transaction");
+            logger.info("Successfully stored supplier transaction");
 
             // Return response DTO
             return responseDTO;
         } catch (Exception e) {
-            log.error("Error storing supplier transaction", e);
+            logger.error("Error storing supplier transaction", e);
             throw new ApplicationStoreSupplierTransactionException("Error storing supplier transaction: " + e.getMessage(), e);
         }
     }
 
-    /**
-     * Validates the transaction details.
-     *
-     * @param transaction the transaction to validate
-     */
     private void validateTransaction(DomainSupplierTransaction transaction) {
         if (transaction.getProducts() == null || transaction.getProducts().isEmpty()) {
             throw new ApplicationStoreSupplierTransactionException("Each SupplierTransaction must have at least one ProductTransaction.");
@@ -88,12 +75,6 @@ public class ApplicationStoreSupplierTransactionService implements ApplicationSt
         });
     }
 
-    /**
-     * Converts DomainSupplierTransaction to AdapterResponseDTO.
-     *
-     * @param domainSupplierTransaction the domain supplier transaction
-     * @return the adapter response DTO
-     */
     private AdapterResponseDTO toResponseDTO(DomainSupplierTransaction domainSupplierTransaction) {
         AdapterResponseDTO responseDTO = new AdapterResponseDTO();
         responseDTO.setId(domainSupplierTransaction.getId());

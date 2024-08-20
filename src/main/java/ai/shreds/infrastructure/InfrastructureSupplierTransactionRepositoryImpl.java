@@ -3,7 +3,7 @@ package ai.shreds.infrastructure;
 import ai.shreds.domain.DomainRepository;
 import ai.shreds.domain.DomainSupplierTransaction;
 import ai.shreds.domain.DomainSaveSupplierTransactionInputPort;
-import ai.shreds.infrastructure.exceptions.InfrastructureSaveSupplierTransactionException;
+import ai.shreds.infrastructure.InfrastructureSaveSupplierTransactionException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +30,8 @@ public class InfrastructureSupplierTransactionRepositoryImpl implements DomainSa
     @Transactional
     public void save(DomainSupplierTransaction supplierTransaction) {
         try {
-            logger.info("Saving supplier transaction with ID: {}", supplierTransaction.getId());
+            logger.info("Saving supplier transaction with ID: {} and Supplier ID: {} and Transaction Date: {} and Total Amount: {}", supplierTransaction.getId(), supplierTransaction.getSupplierId(), supplierTransaction.getTransactionDate(), supplierTransaction.getTotalAmount());
             domainRepository.save(supplierTransaction);
-            logger.info("Supplier transaction with ID: {} saved successfully", supplierTransaction.getId());
         } catch (Exception e) {
             logger.error("Failed to save supplier transaction", e);
             throw new InfrastructureSaveSupplierTransactionException("Failed to save supplier transaction", e);

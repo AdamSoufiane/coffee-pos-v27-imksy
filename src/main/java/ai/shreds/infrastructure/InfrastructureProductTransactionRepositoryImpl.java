@@ -2,8 +2,8 @@ package ai.shreds.infrastructure;
 
 import ai.shreds.domain.DomainProductTransaction;
 import ai.shreds.domain.DomainSaveProductTransactionInputPort;
-import ai.shreds.infrastructure.repository.ProductTransactionRepository;
-import ai.shreds.infrastructure.exception.InfrastructureSaveProductTransactionException;
+import ai.shreds.infrastructure.InfrastructureProductTransactionRepository;
+import ai.shreds.infrastructure.InfrastructureSaveProductTransactionException;
 import org.springframework.stereotype.Repository;
 import lombok.RequiredArgsConstructor;
 
@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class InfrastructureProductTransactionRepositoryImpl implements DomainSaveProductTransactionInputPort {
 
-    private final ProductTransactionRepository productTransactionRepository;
+    private final InfrastructureProductTransactionRepository productTransactionRepository;
 
     /**
      * Saves a product transaction to the database.

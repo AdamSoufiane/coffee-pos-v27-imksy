@@ -8,29 +8,31 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Configuration class for setting up the PlatformTransactionManager.
  */
 @Configuration
 @RequiredArgsConstructor
-@Slf4j
-public final class InfrastructurePlatformTransactionManager {
+public class InfrastructurePlatformTransactionManager {
 
+    private static final Logger log = LoggerFactory.getLogger(InfrastructurePlatformTransactionManager.class);
     private final DataSource dataSource;
     private final LocalContainerEntityManagerFactoryBean entityManagerFactoryBean;
 
     /**
      * Configures and returns the PlatformTransactionManager bean.
      *
+     * @param entityManagerFactory the EntityManagerFactory
      * @return the configured PlatformTransactionManager
      */
     @Bean
-    public PlatformTransactionManager transactionManager() {
+    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
         log.info("Configuring JpaTransactionManager");
         JpaTransactionManager transactionManager = new JpaTransactionManager();
-        transactionManager.setEntityManagerFactory(entityManagerFactory());
+        transactionManager.setEntityManagerFactory(entityManagerFactory);
         return transactionManager;
     }
 

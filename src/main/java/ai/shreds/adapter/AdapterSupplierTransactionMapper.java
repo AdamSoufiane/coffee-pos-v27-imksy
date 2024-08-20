@@ -2,35 +2,33 @@ package ai.shreds.adapter;
 
 import ai.shreds.domain.DomainSupplierTransaction;
 import ai.shreds.domain.DomainProductTransaction;
-import ai.shreds.adapter.AdapterRequestParams;
-import ai.shreds.adapter.AdapterProductTransactionRequest;
 import org.springframework.stereotype.Component;
-import lombok.extern.slf4j.Slf4j;
-import lombok.RequiredArgsConstructor;
+import org.springframework.util.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
-@Slf4j
-@RequiredArgsConstructor
 public class AdapterSupplierTransactionMapper {
 
+    private static final Logger logger = LoggerFactory.getLogger(AdapterSupplierTransactionMapper.class);
+
     public DomainSupplierTransaction toDomain(AdapterRequestParams request) {
-        if (request == null || request.getSupplierId() == null || request.getTransactionDate() == null || request.getProducts() == null) {
-            throw new IllegalArgumentException("Invalid request parameters");
-        }
+        Assert.notNull(request, "Request cannot be null");
+        Assert.notNull(request.getSupplierId(), "Supplier ID cannot be null");
+        Assert.notNull(request.getTransactionDate(), "Transaction date cannot be null");
+        Assert.notNull(request.getProducts(), "Products list cannot be null");
 
         List<DomainProductTransaction> productTransactions = request.getProducts().stream()
                 .map(this::toDomain)
                 .collect(Collectors.toList());
 
-        log.info("Mapping AdapterRequestParams to DomainSupplierTransaction");
-
-        UUID supplierTransactionId = UUID.randomUUID(); // Generating a unique ID
+        logger.info("Mapping AdapterRequestParams to DomainSupplierTransaction");
 
         return DomainSupplierTransaction.builder()
-                .id(supplierTransactionId)
+                .id(UUID.randomUUID())
                 .supplierId(request.getSupplierId())
                 .transactionDate(request.getTransactionDate())
                 .products(productTransactions)
@@ -38,16 +36,15 @@ public class AdapterSupplierTransactionMapper {
     }
 
     private DomainProductTransaction toDomain(AdapterProductTransactionRequest request) {
-        if (request == null || request.getProductId() == null || request.getQuantity() == null || request.getPrice() == null) {
-            throw new IllegalArgumentException("Invalid product transaction request parameters");
-        }
+        Assert.notNull(request, "Request cannot be null");
+        Assert.notNull(request.getProductId(), "Product ID cannot be null");
+        Assert.notNull(request.getQuantity(), "Quantity cannot be null");
+        Assert.notNull(request.getPrice(), "Price cannot be null");
 
-        log.info("Mapping AdapterProductTransactionRequest to DomainProductTransaction");
-
-        UUID productTransactionId = UUID.randomUUID(); // Generating a unique ID
+        logger.info("Mapping AdapterProductTransactionRequest to DomainProductTransaction");
 
         return DomainProductTransaction.builder()
-                .id(productTransactionId)
+                .id(UUID.randomUUID())
                 .productId(request.getProductId())
                 .quantity(request.getQuantity())
                 .price(request.getPrice())

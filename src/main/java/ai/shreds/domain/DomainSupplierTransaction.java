@@ -3,13 +3,14 @@ package ai.shreds.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Represents the overall transaction related to a supplier, including multiple products.
@@ -33,6 +34,7 @@ public class DomainSupplierTransaction {
     @Column(name = "transaction_date", nullable = false)
     private Timestamp transactionDate;
 
+    @NotNull
     @Column(name = "total_amount", nullable = false)
     private BigDecimal totalAmount;
 

@@ -1,14 +1,11 @@
 package ai.shreds.adapter;
 
 import ai.shreds.domain.DomainProductTransaction;
-import ai.shreds.adapter.AdapterProductTransactionRequest;
+import lombok.NonNull;
 
 public class AdapterProductTransactionMapper {
 
-    public DomainProductTransaction toDomain(AdapterProductTransactionRequest request) {
-        if (request == null) {
-            return null;
-        }
+    public DomainProductTransaction toDomain(@NonNull AdapterProductTransactionRequest request) {
         DomainProductTransaction domainProductTransaction = new DomainProductTransaction();
         domainProductTransaction.setProductId(request.getProductId());
         domainProductTransaction.setQuantity(request.getQuantity());

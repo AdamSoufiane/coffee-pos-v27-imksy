@@ -1,9 +1,6 @@
 package ai.shreds.application;
 
 import ai.shreds.adapter.AdapterResponseDTO;
-import ai.shreds.application.exception.ApplicationSendInventoryUpdateNotificationException;
-import ai.shreds.application.port.ApplicationNotificationOutputPort;
-import ai.shreds.application.port.ApplicationSendInventoryUpdateNotificationOutputPort;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
